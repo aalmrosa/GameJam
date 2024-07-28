@@ -66,16 +66,16 @@ public class FirstScreen implements Screen {
 
         //movement keys
         if(Gdx.input.isKeyPressed(playerCharacter.moveUp)){
-            playerCharacter.moveUp();
+            playerCharacter.move(0, 180);
         }
         if(Gdx.input.isKeyPressed(playerCharacter.moveDown)){
-            playerCharacter.moveDown();
+            playerCharacter.move(0, -180);
         }
         if(Gdx.input.isKeyPressed(playerCharacter.moveLeft)){
-            playerCharacter.moveLeft();
+            playerCharacter.move(-180, 0);
         }
         if(Gdx.input.isKeyPressed(playerCharacter.moveRight)){
-            playerCharacter.moveRight();
+            playerCharacter.move(180, 0);
         }
         playerCharacter.checkCollision(walls);
     }

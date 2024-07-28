@@ -22,33 +22,20 @@ public class Player {
     public int moveLeft = Input.Keys.LEFT;
     public int moveRight = Input.Keys.RIGHT;
 
-    private final int MOVE_SPEED = 180;
-
     //movement
-    public void moveUp(){
-        playerHitbox.y += MOVE_SPEED * Gdx.graphics.getDeltaTime();
-    }
-
-    public void moveDown(){
-        playerHitbox.y -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
-    }
-
-    public void moveLeft(){
-        playerHitbox.x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
-    }
-
-    public void moveRight(){
-        playerHitbox.x += MOVE_SPEED * Gdx.graphics.getDeltaTime();
+    public void move(int velocityX, int velocityY){
+         playerHitbox.x += velocityX * Gdx.graphics.getDeltaTime();
+         playerHitbox.y += velocityY * Gdx.graphics.getDeltaTime();
     }
 
     public void checkCollision(Array<Rectangle> walls){
         for(Rectangle wall : walls){
             if(playerHitbox.overlaps(wall)){
                 if(playerHitbox.x + playerHitbox.width > wall.x){
-                    playerHitbox.x = wall.x;
+                    playerHitbox.x = wall.x - playerHitbox.width;
                 }
                 if(playerHitbox.y + playerHitbox.height > wall.y){
-                    playerHitbox.y = wall.y;
+                    playerHitbox.y = wall.y - playerHitbox.height;
                 }
             }
         }
