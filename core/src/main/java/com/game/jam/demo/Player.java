@@ -23,21 +23,34 @@ public class Player {
     public int moveRight = Input.Keys.RIGHT;
 
     //movement
-    public void move(int velocityX, int velocityY){
+    public void move(int velocityX, int velocityY, Array<Rectangle> walls){
          playerHitbox.x += velocityX * Gdx.graphics.getDeltaTime();
          playerHitbox.y += velocityY * Gdx.graphics.getDeltaTime();
+
+         for(Rectangle wall : walls){
+             if(playerHitbox.overlaps(wall)){
+                 playerHitbox.x -= velocityX * Gdx.graphics.getDeltaTime();
+                 playerHitbox.y -= velocityY * Gdx.graphics.getDeltaTime();
+             }
+         }
     }
 
-    public void checkCollision(Array<Rectangle> walls){
-        for(Rectangle wall : walls){
-            if(playerHitbox.overlaps(wall)){
-                if(playerHitbox.x + playerHitbox.width > wall.x){
-                    playerHitbox.x = wall.x - playerHitbox.width;
-                }
-                if(playerHitbox.y + playerHitbox.height > wall.y){
-                    playerHitbox.y = wall.y - playerHitbox.height;
-                }
-            }
-        }
-    }
+//    public void checkCollision(Array<Rectangle> walls){
+//        for(Rectangle wall : walls){
+//            if(playerHitbox.overlaps(wall)){
+//                if(playerHitbox.x + playerHitbox.width > wall.x){
+//                    playerHitbox.x = wall.x - playerHitbox.width;
+//                }
+//                if(playerHitbox.x < wall.x + wall.width){
+//                    playerHitbox.x = wall.x + wall.width;
+//                }
+//                if(playerHitbox.y + playerHitbox.height > wall.y ){
+//                    playerHitbox.y = wall.y - playerHitbox.height;
+//                }
+//                if(playerHitbox.y < wall.y + wall.height){
+//                    playerHitbox.y = wall.y + wall.height;
+//                }
+//            }
+//        }
+//    }
 }
