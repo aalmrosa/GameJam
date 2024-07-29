@@ -15,6 +15,7 @@ import lombok.Setter;
 public class Player {
     private Texture playerTexture;
     private Rectangle playerHitbox;
+    private boolean alreadyLoaded;
 
     //action keys
     public int moveUp = Input.Keys.UP;
@@ -22,12 +23,17 @@ public class Player {
     public int moveLeft = Input.Keys.LEFT;
     public int moveRight = Input.Keys.RIGHT;
 
+    public Player(Rectangle playerHitbox, Texture playerTexture){
+        this.playerHitbox = playerHitbox;
+        this.playerTexture = playerTexture;
+        this.alreadyLoaded = false;
+    }
     //movement
-    public void move(int velocityX, int velocityY, Array<Rectangle> walls){
+    public void move(int velocityX, int velocityY, Array<Rectangle> obstacles){
          playerHitbox.x += velocityX * Gdx.graphics.getDeltaTime();
          playerHitbox.y += velocityY * Gdx.graphics.getDeltaTime();
 
-         for(Rectangle wall : walls){
+         for(Rectangle wall : obstacles){
              if(playerHitbox.overlaps(wall)){
                  playerHitbox.x -= velocityX * Gdx.graphics.getDeltaTime();
                  playerHitbox.y -= velocityY * Gdx.graphics.getDeltaTime();
@@ -35,22 +41,18 @@ public class Player {
          }
     }
 
-//    public void checkCollision(Array<Rectangle> walls){
-//        for(Rectangle wall : walls){
-//            if(playerHitbox.overlaps(wall)){
-//                if(playerHitbox.x + playerHitbox.width > wall.x){
-//                    playerHitbox.x = wall.x - playerHitbox.width;
-//                }
-//                if(playerHitbox.x < wall.x + wall.width){
-//                    playerHitbox.x = wall.x + wall.width;
-//                }
-//                if(playerHitbox.y + playerHitbox.height > wall.y ){
-//                    playerHitbox.y = wall.y - playerHitbox.height;
-//                }
-//                if(playerHitbox.y < wall.y + wall.height){
-//                    playerHitbox.y = wall.y + wall.height;
-//                }
-//            }
-//        }
-//    }
+    public void checkMovement(Array<Rectangle> obstacles){
+        if(Gdx.input.isKeyPressed(moveUp)){
+            move(0, 180, obstacles);
+        }
+        if(Gdx.input.isKeyPressed(moveDown)){
+            move(0, -180, obstacles);
+        }
+        if(Gdx.input.isKeyPressed(moveLeft)){
+            move(-180, 0, obstacles);
+        }
+        if(Gdx.input.isKeyPressed(moveRight)){
+            move(180, 0, obstacles);
+        }
+    }
 }

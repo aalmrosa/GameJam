@@ -3,6 +3,8 @@ package com.game.jam.demo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenuScreen implements Screen {
@@ -35,7 +37,11 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         if(Gdx.input.isTouched()){
-            game.setScreen(new FirstScreen(game));
+            game.setScreen(
+                new FirstScreen(game, new Player(
+                    new Rectangle(32, 32, 32, 32),
+                    new Texture(Gdx.files.internal("player-highlight.png"))
+                )));
             dispose();
         }
     }
