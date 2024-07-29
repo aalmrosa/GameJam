@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class FirstScreen implements Screen {
+public class SecondScreen implements Screen {
     final Demo game;
 
     Player playerCharacter;
@@ -20,17 +20,16 @@ public class FirstScreen implements Screen {
 
     Rectangle doorArea;
 
+    Array<Rectangle> obstacles;
+
     Array<Rectangle> walls;
     Array<Rectangle> doors;
 
-    Array<Rectangle> obstacles;
-
     OrthographicCamera camera;
 
-    public FirstScreen(Demo game, Player playerCharacter) {
+    public SecondScreen(Demo game, Player playerCharacter) {
         this.game = game;
 
-        //set scene
         wallHighlight = new Texture(Gdx.files.internal("wall-highlight.png"));
         walls = new Array<Rectangle>();
         setWalls();
@@ -40,19 +39,14 @@ public class FirstScreen implements Screen {
         setDoors();
 
         doorAreaHighlight = new Texture(Gdx.files.internal("door-area-highlight.png"));
-        doorArea = new Rectangle(doors.get(0).x, doors.get(0).y-18, doors.get(0).width, doors.get(0).height+8);
+        doorArea  = new Rectangle(doors.get(0).x, doors.get(0).y+18, doors.get(0).width, doors.get(0).height+8);
+
+        this.playerCharacter = playerCharacter;
+        playerCharacter.setPlayerHitbox(new Rectangle(doors.get(0).x+18, doors.get(0).y+32, 32, 32));
 
         obstacles = new Array<Rectangle>();
         obstacles.addAll(walls);
         obstacles.addAll(doors);
-
-        this.playerCharacter = playerCharacter;
-
-        //check if it's the first time the player entered the room
-        if(playerCharacter.isAlreadyLoaded()){
-            playerCharacter.setPlayerHitbox(new Rectangle(doors.get(0).x+18, doors.get(0).y-32, 32, 32));
-        }
-        playerCharacter.setAlreadyLoaded(true);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 320, 320);
@@ -60,22 +54,21 @@ public class FirstScreen implements Screen {
 
     @Override
     public void show() {
-        // Prepare your screen here.
+
     }
 
     @Override
     public void render(float delta) {
-        // Draw your screen here. "delta" is the time since last render in seconds.
         ScreenUtils.clear(0, 0, 0.2f, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
         game.batch.draw(playerCharacter.getPlayerTexture(), playerCharacter.getPlayerHitbox().x, playerCharacter.getPlayerHitbox().y);
-        for(Rectangle wall : walls){
+        for(Rectangle wall : walls) {
             game.batch.draw(wallHighlight, wall.x, wall.y, wall.width, wall.height);
         }
-        for(Rectangle door : doors){
+        for(Rectangle door : doors) {
             game.batch.draw(doorHighlight, door.x, door.y, door.width, door.height);
         }
         game.batch.draw(doorAreaHighlight, doorArea.x, doorArea.y, doorArea.width, doorArea.height);
@@ -83,49 +76,48 @@ public class FirstScreen implements Screen {
 
         playerCharacter.checkMovement(obstacles);
         if(Gdx.input.isKeyJustPressed(Input.Keys.E) && playerCharacter.getPlayerHitbox().overlaps(doorArea)){
-            game.setScreen(new SecondScreen(game, playerCharacter));
+            game.setScreen(new FirstScreen(game, playerCharacter));
             dispose();
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
+
     }
 
     @Override
     public void pause() {
-        // Invoked when your application is paused.
+
     }
 
     @Override
     public void resume() {
-        // Invoked when your application is resumed after pause.
+
     }
 
     @Override
     public void hide() {
-        // This method is called when another screen replaces this one.
+
     }
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
         doorHighlight.dispose();
         wallHighlight.dispose();
     }
 
     private void setWalls(){
-        walls.add(new Rectangle(0, 0, 320, 32)); //sets bottom wall
-        walls.add(new Rectangle(0, 32, 32, 320-(32*2))); //sets left wall
-        walls.add(new Rectangle(320-32, 32, 32, 320-(32*2))); //sets right wall
-        walls.add(new Rectangle(0, 320-32, 320-(32*4), 32)); //sets top wall 1
-        walls.add(new Rectangle(320-(32*2), 320-32, (32*2), 32)); //sets top wall 2
+        walls.add(new Rectangle(0, 0, 320-(32*4), 32));//bottom 1
+        walls.add(new Rectangle(320-(32*2), 0, (32*2), 32));//bottom 2
+        walls.add(new Rectangle(0, 32, 32, 320-(32*2)));//left
+        walls.add(new Rectangle(320-32, 32, 32, 320-(32*2)));//right
+        walls.add(new Rectangle(0, 320-32, 320, 32));//up
 
-        walls.add(new Rectangle(180, 180, 32, 32)); //center pillar
+        walls.add(new Rectangle(180, 180, 32, 32));//rogue
     }
     private void setDoors(){
 
-        doors.add(new Rectangle(320 - (32*4), 320 - 32 + 8, 64, 32 - 8));
+        doors.add(new Rectangle(320-(32*4), 0, 64, 32-8));
     }
 }

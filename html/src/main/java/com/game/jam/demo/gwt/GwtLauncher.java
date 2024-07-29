@@ -9,7 +9,7 @@ import com.game.jam.demo.Demo;
 public class GwtLauncher extends GwtApplication {
         @Override
         public GwtApplicationConfiguration getConfig () {
-            return new GwtApplicationConfiguration(320, 320);
+            return new GwtApplicationConfiguration(640, 640);
         }
 
         @Override
